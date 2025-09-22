@@ -1,0 +1,35 @@
+name: Python package
+
+on:
+  push:
+    paths:
+      - 'workshop/upgraded/**'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'workshop/upgraded/**'
+      - '.github/workflows/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        cd workshop/upgraded
+        python -m pip install --upgrade pip
+        pip install .[test]
+        pip install pytest
+
+    - name: Run tests
+      run: |
+        cd workshop/upgraded
+        pytest
